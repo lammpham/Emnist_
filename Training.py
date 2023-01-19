@@ -1,6 +1,5 @@
+#Importiere benötigte Bibliotheken
 import os
-# import cv2
-#import numpy
 import matplotlib.pyplot as plt
 from emnist import extract_training_samples
 import matplotlib.pyplot as plt
@@ -13,15 +12,17 @@ importfromweb = False
 # Holen die Daten aus OpenML Webseit
 if importfromweb:
     x, y = extract_training_samples('letters')
-    # Optional: Benutze picle um Daten und Labels auf Platte zu speichern oder zu laden
+    #Benutze picle um Daten und Labels auf Platte zu speichern oder zu laden
     pickle.dump(x,open("emnist_data",'wb'))
     pickle.dump(y,open("emnist_labels",'wb'))
 else:
     x = pickle.load(open("emnist_data", 'rb'))
     y = pickle.load(open("emnist_labels", 'rb'))
-    
+
+#Normalisierung    
 x = x / 255.
 
+#Datensplit 
 x_train, x_test = x[:60000], x[60000:70000]
 y_train, y_test = y[:60000], y[60000:70000]
 
@@ -35,12 +36,12 @@ print("Image Label: " + str(chr(y_train[img_index]+65)))
 plt.imshow(img.reshape((28,28)))
 
 
-# 2.MLP mit mehreren Hidden-Layers
+# Instanziiere MLP Classifier mit mehreren Hidden-Layers
 mlp2 = MLPClassifier(hidden_layer_sizes=(200,200,200,200,200,), max_iter=1000, alpha=1e-4,
                      solver='sgd', verbose=10, tol=1e-4, random_state=1,
                      learning_rate_init=.1)
 
-
+#Training
 mlp2.fit(x_train, y_train)
 
 y_pred = mlp2.predict(x_test)
@@ -48,8 +49,8 @@ y_pred = mlp2.predict(x_test)
 cm = confusion_matrix(y_test, y_pred)
 plt.matshow(cm)
 
-
 print("Training set score: %f" % mlp2.score(x_train, y_train))
 print("Test set score: %f" % mlp2.score(x_test, y_test))
+
 # Speichere Netzwerk auf der Platte
 pickle.dump(mlp2, open("MLP_classifier", 'wb'))
