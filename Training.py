@@ -36,7 +36,7 @@ print("Image Label: " + str(chr(y_train[img_index]+65)))
 plt.imshow(img.reshape((28,28)))
 
 
-# Instanziiere MLP Classifier mit mehreren Hidden-Layers
+# Instantiiere MLP Classifier mit mehreren Hidden-Layers
 mlp2 = MLPClassifier(hidden_layer_sizes=(200,200,200,200,200,), max_iter=1000, alpha=1e-4,
                      solver='sgd', verbose=10, tol=1e-4, random_state=1,
                      learning_rate_init=.1)
